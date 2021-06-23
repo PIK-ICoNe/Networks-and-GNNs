@@ -1,0 +1,82 @@
+\documentclass[reprint,twocolumn,amsmath,amssymb,aps]{revtex4-1}
+\pdfoutput=1 
+\usepackage{graphicx}% Include figure files
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{bm}% bold math
+\usepackage{hyperref}% add hypertext capabilities
+\DeclareMathOperator{\Tr}{Tr}
+
+\newcommand{\NN}{\mathcal{NN}}
+\newcommand{\XX}{\mathcal{X}}
+\newcommand{\YY}{\mathcal{Y}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\bb}{\mathbf{b}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\PP}{\mathbf{P}}
+\newcommand{\cc}{\mathbf{c}}
+\newcommand{\xstar}{\mathbf{x}^\ast}
+
+
+\begin{document}
+
+\title{Networks \\--\\ Complex and Graph Neural}% Force line breaks with \\
+
+\author{Frank Hellmann}
+\email{hellmann@pik-potsdam.de}
+\affiliation{Potsdam Institute for Climate Impact Research}
+
+\date{\today}
+
+\begin{abstract}
+Seeding thoughts for the Knowledge Repo on the intersection of complex networks and graph neural networks.
+\end{abstract}
+
+\maketitle
+
+\section{Initial observations}
+
+We have a language clash: The graph in Graph Neural Networks (GNNs) is the network in Complex Networks. We will try not to use the word network in this Knowledge Repo. All Complex Networks and graphs we will consider are defined over an index set $1 \dots n$.
+
+\section{A brief taxonomy of Neural Networks under Permutations}
+
+Neural Networks (NN) are function approximators. That is, specifying a neural network requires specifying an input and output space first: $f_\NN: \XX \rightarrow \YY$. This space can carry extra structure. Set based neural networks deal with spaces that are product spaces $\XX = \X^n$ and approximate functions that are permutation invariant or covariant. We will always use indices $i, j$ running from $1 \dots n$ to denote the copies. Writing $S_n$ for the symmetric group on the indices parametrizing the copies of $\X$ and $\Y$, and $P \in S_n$ for the permutations we have the covariant $f^C_\NN: \X^n \rightarrow \Y^n$:
+
+\begin{align}
+f^C_\NN(P x) = P f^C_\NN(x)
+\end{align}
+
+and the invariant $f^I_\NN: \X^n \rightarrow \YY$:
+
+\begin{align}
+f^I_\NN(P x) = f^I_\NN(x)
+\end{align}
+
+The name set based indicates that the functions learned only depend on the set of components $x_i$ in the vector $x = (x_1, \dots, x_n)$, not on their order.
+
+We can now consider more complex representations of the permutation group. For example, consider the space $\XX = \X^{n \times n}$. Elements of this space have components $x_{ij}$. This space transforms naturally under $S_n$ by conjugation. A covariant network $f^C_\NN: \X^{n \times n} \rightarrow \Y^n$ would thus satisfy:
+
+\begin{align}
+f^C_\NN(P x P) = P f^C_\NN(x)
+\end{align}
+
+Finally, for the space $\XX = \X_2^{n \times n} \oplus \X_1^{n}$ we would obtain a covariant function
+
+\begin{align}
+f^C_\NN(P x_2 P, P x_1) = P f^C_\NN(x_2, x_1)
+\end{align}
+
+This is the form of the symmetry of a Graph Neural Network. The coefficients $(x_2)_{ij}$ contain the information on the connection from node $i$ to $j$, in the simples case simply whether the nodes are connected or not.
+
+\subsection{Tensor towers}
+
+More generally we can have an entire tower of tensors, where, at each point in the hierarchy, we take some base space $\X_k$, take $n$ copies of it, and tensor it together $k$ times.
+\begin{align}
+\XX = \bigoplus_{k=0}^{\infty} \bigotimes^k \X_k^n
+\end{align}
+
+This also transforms naturally under $S_n$. This space naturally carries data on hypergraphs. Covariant Neural networks on such spaces would appropriately be called Hypergraph Neural Networks.
+
+\bibliography{biblio}
+
+\end{document}
