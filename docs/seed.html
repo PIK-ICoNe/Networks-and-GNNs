@@ -6,148 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Frank Hellmann" />
   <title>Networks – Complex and Graph Neural</title>
-  <style>
-    html {
-      line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      word-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
 </head>
 <body>
 <header id="title-block-header">
@@ -157,25 +21,32 @@ Complex and Graph Neural</h1>
 <p class="author">Frank Hellmann</p>
 </header>
 <h1 id="initial-observations">Initial observations</h1>
-<p>We have a language clash: The graph in Graph Neural Networks (GNNs) is the network in Complex Networks. We will try not to use the word network in this Knowledge Repo. All Complex Networks and graphs we will consider are defined over an index set <span class="math inline">\(1 \dots n\)</span>.</p>
-<h1 id="a-brief-taxonomy-of-neural-networks-under-permutations">A brief taxonomy of Neural Networks under Permutations</h1>
-<p>Neural Networks (NN) are function approximators. That is, specifying a neural network requires specifying an input and output space first: <span class="math inline">\(f_\mathcal{NN}: \mathcal{X}\rightarrow \mathcal{Y}\)</span>. This space can carry extra structure. Set based neural networks deal with spaces that are product spaces <span class="math inline">\(\mathcal{X}= \mathbf{X}^n\)</span> and approximate functions that are permutation invariant or covariant. We will always use indices <span class="math inline">\(i, j\)</span> running from <span class="math inline">\(1 \dots n\)</span> to denote the copies. Writing <span class="math inline">\(S_n\)</span> for the symmetric group on the indices parametrizing the copies of <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span>, and <span class="math inline">\(P \in S_n\)</span> for the permutations we have the covariant <span class="math inline">\(f^C_\mathcal{NN}: \mathbf{X}^n \rightarrow \mathbf{Y}^n\)</span>:</p>
-<p><span class="math display">\[\begin{aligned}
-f^C_\mathcal{NN}(P x) = P f^C_\mathcal{NN}(x)\end{aligned}\]</span></p>
-<p>and the invariant <span class="math inline">\(f^I_\mathcal{NN}: \mathbf{X}^n \rightarrow \mathcal{Y}\)</span>:</p>
-<p><span class="math display">\[\begin{aligned}
-f^I_\mathcal{NN}(P x) = f^I_\mathcal{NN}(x)\end{aligned}\]</span></p>
-<p>The name set based indicates that the functions learned only depend on the set of components <span class="math inline">\(x_i\)</span> in the vector <span class="math inline">\(x = (x_1, \dots, x_n)\)</span>, not on their order.</p>
-<p>We can now consider more complex representations of the permutation group. For example, consider the space <span class="math inline">\(\mathcal{X}= \mathbf{X}^{n \times n}\)</span>. Elements of this space have components <span class="math inline">\(x_{ij}\)</span>. This space transforms naturally under <span class="math inline">\(S_n\)</span> by conjugation. A covariant network <span class="math inline">\(f^C_\mathcal{NN}: \mathbf{X}^{n \times n} \rightarrow \mathbf{Y}^n\)</span> would thus satisfy:</p>
-<p><span class="math display">\[\begin{aligned}
-f^C_\mathcal{NN}(P x P) = P f^C_\mathcal{NN}(x)\end{aligned}\]</span></p>
-<p>Finally, for the space <span class="math inline">\(\mathcal{X}= \mathbf{X}_2^{n \times n} \oplus \mathbf{X}_1^{n}\)</span> we would obtain a covariant function</p>
-<p><span class="math display">\[\begin{aligned}
-f^C_\mathcal{NN}(P x_2 P, P x_1) = P f^C_\mathcal{NN}(x_2, x_1)\end{aligned}\]</span></p>
-<p>This is the form of the symmetry of a Graph Neural Network. The coefficients <span class="math inline">\((x_2)_{ij}\)</span> contain the information on the connection from node <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span>, in the simples case simply whether the nodes are connected or not.</p>
-<h2 id="tensor-towers">Tensor towers</h2>
-<p>More generally we can have an entire tower of tensors, where, at each point in the hierarchy, we take some base space <span class="math inline">\(\mathbf{X}_k\)</span>, take <span class="math inline">\(n\)</span> copies of it, and tensor it together <span class="math inline">\(k\)</span> times. <span class="math display">\[\begin{aligned}
-\mathcal{X}= \bigoplus_{k=0}^{\infty} \bigotimes^k \mathbf{X}_k^n\end{aligned}\]</span></p>
-<p>This also transforms naturally under <span class="math inline">\(S_n\)</span>. This space naturally carries data on hypergraphs. Covariant Neural networks on such spaces would appropriately be called Hypergraph Neural Networks.</p>
+<p>We have a language clash: The graph in Graph Neural Networks (GNNs) is the network in Complex Networks. We will try not to use the word network in this Knowledge Repo. All Complex Networks and graphs we will consider are defined over an index set <span class="math inline">1…<em>n</em></span>.</p>
+<h1 id="a-brief-taxonomy-of-functions-on-sets-and-graphs">A brief taxonomy of Functions on Sets and Graphs</h1>
+<p>Neural Networks (NN) are function approximators. Set based Neural Networks approximate functions from a set of inputs, meaning there is no particular order of the inputs specified. We call such functions set based functions. Graph Neural Networks approximate functions from data associated to graphs, and again, there is no natural ordering for these data, we refer to the functions as graph based functions. Network Measures in Complex Network theory are graph based functions for graphs with no data associated to them. They might go to a single number, to the set of nodes, or the set of edges.</p>
+<p>It’s instructive to briefly consider set based functions on sets where the elements of the set carry no data, or equivalently, functions that don’t depend on the data, in analogy to Network Measures. If such a function takes values in, e.g. the reals <span class="math inline">ℝ</span>, it should tell us something about the set aspects of the set of inputs we have. The only property of a set independent of its elements is its size, thus any set based function that does not depend on the data associated to the set elements, is a function of the size of the input set.</p>
+<p>In contrast, for graph based functions, much more complex functions are neccessary.</p>
+<h2 id="classification-through-permutations">Classification through permutations</h2>
+<p>For all these functions, the order in which the inputs are presented does not matter. When we want to write a set based function taking values in the reals in the form <span class="math inline"><em>f</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>, …)</span> they are permutation invariant <br /><span class="math display">$$\begin{aligned}
+f(x_1, x_2, \dots) = f(x_{\sigma(1)}, x_{\sigma(2)}, \dots)\end{aligned}$$</span><br /> where <span class="math inline"><em>σ</em></span> denotes a permutation.</p>
+<p>For a graph based function, we need to permute the edges and the vertices at the same time.</p>
+<p><br /><span class="math display">$$\begin{aligned}
+f(x_1, x_2, \dots, e_{12}, \dots) = f(x_{\sigma(1)}, x_{\sigma(2)}, \dots, e_{\sigma(1),\sigma(2)})\end{aligned}$$</span><br /></p>
+<p>If the graph based function provides a set of data associated to the nodes or edges then the function has to be covariant under permutations:</p>
+<p><br /><span class="math display">$$\begin{aligned}
+f_1(x_1, x_2, \dots) = f_{\sigma(1)}(x_{\sigma(1)}, x_{\sigma(2)}, \dots)\end{aligned}$$</span><br /></p>
+<p>Generally speaking the domain and image of the function, written as a function on ordinary spaces, carry a representation of some permutation group.</p>
+<h1 id="qft-and-all-that">QFT and all that</h1>
+<p>Some vague associations...</p>
+<p>Let’s consider set based functions first. We want functions to go from some (set of) <span class="math inline"><em>X</em></span> to (a set of) <span class="math inline"><em>Y</em></span>.Let’s consider the space of functions on <span class="math inline"><em>X</em></span>, <span class="math inline">ℝ<sup><em>X</em></sup></span> (subject to sensible conditions). Then a function <span class="math inline"><em>X</em></span> to <span class="math inline"><em>Y</em></span> induces a linear function <span class="math inline">ℝ<sup><em>X</em></sup></span> to <span class="math inline">ℝ<sup><em>Y</em></sup></span>. The cartesian product of spaces <span class="math inline"><em>X</em></span> and <span class="math inline"><em>Y</em></span> on which the permutation acts directly becomes a linear representation of the permutaton group on the tensor products of <span class="math inline">ℝ<sup><em>X</em></sup></span> and <span class="math inline">ℝ<sup><em>Y</em></sup></span> respectively. These spaces contain the probability densities on the direct product space. They might be suitable to Bayesian extensions of learning set or graph based functions.</p>
+<p>This latter is pretty much the set up for a bosonic QFT. This suggests that we can adopt the machinery of QFT with creation and annihilation operators, actions and interaction terms, diagrams, etc... to the setting of set based functions. It might be interesting to see if (stochastic) gradient descent can be connected to renormalization.</p>
+<p>The big question is what the equivalent of these structures would be if we consider graph based functions.</p>
+<h1 id="general-structure-results-for-permutation-invariant-functions">General structure results for permutation invariant functions</h1>
+<p>Theorems exist that guarantee that a permutation invariant function can be written as</p>
+<p><br /><span class="math display">$$\begin{aligned}
+f(x_1, x_2, \dots) = f^* \left(\sum_i (f^{**}(x_i))\right)\end{aligned}$$</span><br /></p>
+<p>See theorem ?? <span class="citation" data-cites="zaheer2017deep"></span>. However this reperesentation might not be useful or meaningful, see e.g. the discussion in <span class="citation" data-cites="wagstaff2019limitations"></span>.</p>
+<p>What is remarkable about this is that this representation theorem also allows us to compare functions on sets of different size, though the results of <span class="citation" data-cites="wagstaff2019limitations"></span> show that generalizations to larger sets is not guaranteed.</p>
+<p>Are there such theorems for graph based functions?</p>
 </body>
 </html>

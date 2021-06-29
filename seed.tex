@@ -38,44 +38,98 @@ Seeding thoughts for the Knowledge Repo on the intersection of complex networks 
 
 We have a language clash: The graph in Graph Neural Networks (GNNs) is the network in Complex Networks. We will try not to use the word network in this Knowledge Repo. All Complex Networks and graphs we will consider are defined over an index set $1 \dots n$.
 
-\section{A brief taxonomy of Neural Networks under Permutations}
+\section{A brief taxonomy of Functions on Sets and Graphs}
 
-Neural Networks (NN) are function approximators. That is, specifying a neural network requires specifying an input and output space first: $f_\NN: \XX \rightarrow \YY$. This space can carry extra structure. Set based neural networks deal with spaces that are product spaces $\XX = \X^n$ and approximate functions that are permutation invariant or covariant. We will always use indices $i, j$ running from $1 \dots n$ to denote the copies. Writing $S_n$ for the symmetric group on the indices parametrizing the copies of $\X$ and $\Y$, and $P \in S_n$ for the permutations we have the covariant $f^C_\NN: \X^n \rightarrow \Y^n$:
+Neural Networks (NN) are function approximators. Set based Neural Networks approximate functions from a set of inputs, meaning there is no particular order of the inputs specified. We call such functions set based functions. Graph Neural Networks approximate functions from data associated to graphs, and again, there is no natural ordering for these data, we refer to the functions as graph based functions. Network Measures in Complex Network theory are graph based functions for graphs with no data associated to them. They might go to a single number, to the set of nodes, or the set of edges.
+
+It's instructive to briefly consider set based functions on sets where the elements of the set carry no data, or equivalently, functions that don't depend on the data, in analogy to Network Measures. If such a function takes values in, e.g. the reals $\mathbb{R}$, it should tell us something about the set aspects of the set of inputs we have. The only property of a set independent of its elements is its size, thus any set based function that does not depend on the data associated to the set elements, is a function of the size of the input set.
+
+In contrast, for graph based functions, much more complex functions are neccessary.
+
+\subsection{Classification through permutations}
+
+For all these functions, the order in which the inputs are presented does not matter. When we want to write a set based function taking values in the reals in the form $f(x_1, x_2, \dots)$ they are permutation invariant
+\begin{align}
+f(x_1, x_2, \dots) = f(x_{\sigma(1)}, x_{\sigma(2)}, \dots)
+\end{align}
+where $\sigma$ denotes a permutation.
+
+For a graph based function, we need to permute the edges and the vertices at the same time.
 
 \begin{align}
-f^C_\NN(P x) = P f^C_\NN(x)
+f(x_1, x_2, \dots, e_{12}, \dots) = f(x_{\sigma(1)}, x_{\sigma(2)}, \dots, e_{\sigma(1),\sigma(2)})
 \end{align}
 
-and the invariant $f^I_\NN: \X^n \rightarrow \YY$:
+If the graph based function provides a set of data associated to the nodes or edges then the function has to be covariant under permutations:
 
 \begin{align}
-f^I_\NN(P x) = f^I_\NN(x)
+f_1(x_1, x_2, \dots) = f_{\sigma(1)}(x_{\sigma(1)}, x_{\sigma(2)}, \dots)
 \end{align}
 
-The name set based indicates that the functions learned only depend on the set of components $x_i$ in the vector $x = (x_1, \dots, x_n)$, not on their order.
+Generally speaking the domain and image of the function, written as a function on ordinary spaces, carry a representation of some permutation group.
+%
+%\subsection{Previously written...}
+%
+% That is, specifying a neural network requires specifying an input and output space first: $f_\NN: \XX \rightarrow \YY$. This space can carry extra structure. Set based neural networks deal with spaces that are product spaces $\XX = \X^n$ and approximate functions that are permutation invariant or covariant. We will always use indices $i, j$ running from $1 \dots n$ to denote the copies. Writing $S_n$ for the symmetric group on the indices parametrizing the copies of $\X$ and $\Y$, and $P \in S_n$ for the permutations we have the covariant $f^C_\NN: \X^n \rightarrow \Y^n$:
+%
+%\begin{align}
+%f^C_\NN(P x) = P f^C_\NN(x)
+%\end{align}
+%
+%and the invariant $f^I_\NN: \X^n \rightarrow \YY$:
+%
+%\begin{align}
+%f^I_\NN(P x) = f^I_\NN(x)
+%\end{align}
+%
+%The name set based indicates that the functions learned only depend on the set of components $x_i$ in the vector $x = (x_1, \dots, x_n)$, not on their order.
+%
+%We can now consider more complex representations of the permutation group. For example, consider the space $\XX = \X^{n \times n}$. Elements of this space have components $x_{ij}$. This space transforms naturally under $S_n$ by conjugation. A covariant network $f^C_\NN: \X^{n \times n} \rightarrow \Y^n$ would thus satisfy:
+%
+%\begin{align}
+%f^C_\NN(P x P) = P f^C_\NN(x)
+%\end{align}
+%
+%Finally, for the space $\XX = \X_2^{n \times n} \oplus \X_1^{n}$ we would obtain a covariant function
+%
+%\begin{align}
+%f^C_\NN(P x_2 P, P x_1) = P f^C_\NN(x_2, x_1)
+%\end{align}
+%
+%This is the form of the symmetry of a Graph Neural Network. The coefficients $(x_2)_{ij}$ contain the information on the connection from node $i$ to $j$, in the simples case simply whether the nodes are connected or not.
+%
+%\subsection{Tensor towers}
+%
+%More generally we can have an entire tower of tensors, where, at each point in the hierarchy, we take some base space $\X_k$, take $n$ copies of it, and tensor it together $k$ times.
+%\begin{align}
+%\XX = \bigoplus_{k=0}^{\infty} \bigotimes^k \X_k^n
+%\end{align}
+%
+%This also transforms naturally under $S_n$. This space naturally carries data on hypergraphs. Covariant Neural networks on such spaces would appropriately be called Hypergraph Neural Networks.
 
-We can now consider more complex representations of the permutation group. For example, consider the space $\XX = \X^{n \times n}$. Elements of this space have components $x_{ij}$. This space transforms naturally under $S_n$ by conjugation. A covariant network $f^C_\NN: \X^{n \times n} \rightarrow \Y^n$ would thus satisfy:
+\section{QFT and all that}
+
+Some vague associations...
+
+Let's consider set based functions first. We want functions to go from some (set of) $X$ to (a set of) $Y$.Let's consider the space of functions on $X$, $\mathbb{R}^X$ (subject to sensible conditions). Then a function $X$ to $Y$ induces a linear function $\mathbb{R}^X$ to $\mathbb{R}^Y$. The cartesian product of spaces $X$ and $Y$ on which the permutation acts directly becomes a linear representation of the permutaton group on the tensor products of $\mathbb{R}^X$ and $\mathbb{R}^Y$ respectively. These spaces contain the probability densities on the direct product space. They might be suitable to Bayesian extensions of learning set or graph based functions.
+
+This latter is pretty much the set up for a bosonic QFT. This suggests that we can adopt the machinery of QFT with creation and annihilation operators, actions and interaction terms, diagrams, etc... to the setting of set based functions. It might be interesting to see if (stochastic) gradient descent can be connected to renormalization.
+
+The big question is what the equivalent of these structures would be if we consider graph based functions.
+
+\section{General structure results for permutation invariant functions}
+
+Theorems exist that guarantee that a permutation invariant function can be written as
 
 \begin{align}
-f^C_\NN(P x P) = P f^C_\NN(x)
+f(x_1, x_2, \dots) = f^* \left(\sum_i (f^{**}(x_i))\right)
 \end{align}
 
-Finally, for the space $\XX = \X_2^{n \times n} \oplus \X_1^{n}$ we would obtain a covariant function
+See theorem ?? \citet{zaheer2017deep}. However this reperesentation might not be useful or meaningful, see e.g. the discussion in \citet{wagstaff2019limitations}.
 
-\begin{align}
-f^C_\NN(P x_2 P, P x_1) = P f^C_\NN(x_2, x_1)
-\end{align}
+What is remarkable about this is that this representation theorem also allows us to compare functions on sets of different size, though the results of \citet{wagstaff2019limitations} show that generalizations to larger sets is not guaranteed.
 
-This is the form of the symmetry of a Graph Neural Network. The coefficients $(x_2)_{ij}$ contain the information on the connection from node $i$ to $j$, in the simples case simply whether the nodes are connected or not.
-
-\subsection{Tensor towers}
-
-More generally we can have an entire tower of tensors, where, at each point in the hierarchy, we take some base space $\X_k$, take $n$ copies of it, and tensor it together $k$ times.
-\begin{align}
-\XX = \bigoplus_{k=0}^{\infty} \bigotimes^k \X_k^n
-\end{align}
-
-This also transforms naturally under $S_n$. This space naturally carries data on hypergraphs. Covariant Neural networks on such spaces would appropriately be called Hypergraph Neural Networks.
+Are there such theorems for graph based functions?
 
 \bibliography{biblio}
 
