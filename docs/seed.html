@@ -6,148 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Frank Hellmann" />
   <title>Networks – Complex and Graph Neural</title>
-  <style>
-    html {
-      line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      word-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
+  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
 </head>
 <body>
 <header id="title-block-header">
@@ -172,17 +37,37 @@ f(x_1, x_2, \dots, e_{12}, \dots) = f(x_{\sigma(1)}, x_{\sigma(2)}, \dots, e_{\s
 <p><span class="math display">\[\begin{aligned}
 f_1(x_1, x_2, \dots) = f_{\sigma(1)}(x_{\sigma(1)}, x_{\sigma(2)}, \dots)\end{aligned}\]</span></p>
 <p>Generally speaking the domain and image of the function, written as a function on ordinary spaces, carry a representation of some permutation group.</p>
-<h1 id="qft-and-all-that">QFT and all that</h1>
-<p>Some vague associations...</p>
-<p>Let’s consider set based functions first. We want functions to go from some (set of) <span class="math inline">\(X\)</span> to (a set of) <span class="math inline">\(Y\)</span>.Let’s consider the space of functions on <span class="math inline">\(X\)</span>, <span class="math inline">\(\mathbb{R}^X\)</span> (subject to sensible conditions). Then a function <span class="math inline">\(X\)</span> to <span class="math inline">\(Y\)</span> induces a linear function <span class="math inline">\(\mathbb{R}^X\)</span> to <span class="math inline">\(\mathbb{R}^Y\)</span>. The cartesian product of spaces <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> on which the permutation acts directly becomes a linear representation of the permutaton group on the tensor products of <span class="math inline">\(\mathbb{R}^X\)</span> and <span class="math inline">\(\mathbb{R}^Y\)</span> respectively. These spaces contain the probability densities on the direct product space. They might be suitable to Bayesian extensions of learning set or graph based functions.</p>
-<p>This latter is pretty much the set up for a bosonic QFT. This suggests that we can adopt the machinery of QFT with creation and annihilation operators, actions and interaction terms, diagrams, etc... to the setting of set based functions. It might be interesting to see if (stochastic) gradient descent can be connected to renormalization.</p>
-<p>The big question is what the equivalent of these structures would be if we consider graph based functions.</p>
+<h2 id="tensor-towers">Tensor towers</h2>
+<p>In the above the node features live in <span class="math inline">\(\mathbf{X}^n\)</span> and the edge features in <span class="math inline">\(\mathbf{X}_e^{n \times n} = \mathbf{X}_e^{2n}\)</span>. The permutation group <span class="math inline">\(S_n\)</span> acts naturally on these spaces by permuting indices in the tensor copies<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. More generally the permutation group also acts naturally on <span class="math inline">\(\mathbf{X}_k^{kn}\)</span> where <span class="math inline">\(\mathbf{X}_k\)</span> is some fixed base space.</p>
+<p>We can take the direct sum of such spaces to obtain an entire tensor tower, <span class="math display">\[\begin{aligned}
+\mathcal{X}= \bigoplus_{k=0}^{\infty} \mathbf{X}_k^{kn} \;.\end{aligned}\]</span> This space also transforms naturally under <span class="math inline">\(S_n\)</span>. It also has an interpretation as being the space that carries data on hypergraphs. Hypergraph Neural Networks have actually already been defined in <span class="citation" data-cites="feng2019hypergraph"></span>.</p>
 <h1 id="general-structure-results-for-permutation-invariant-functions">General structure results for permutation invariant functions</h1>
 <p>Theorems exist that guarantee that a permutation invariant function can be written as</p>
 <p><span class="math display">\[\begin{aligned}
 f(x_1, x_2, \dots) = f^* \left(\sum_i (f^{**}(x_i))\right)\end{aligned}\]</span></p>
 <p>See theorem ?? <span class="citation" data-cites="zaheer2017deep"></span>. However this reperesentation might not be useful or meaningful, see e.g. the discussion in <span class="citation" data-cites="wagstaff2019limitations"></span>.</p>
 <p>What is remarkable about this is that this representation theorem also allows us to compare functions on sets of different size, though the results of <span class="citation" data-cites="wagstaff2019limitations"></span> show that generalizations to larger sets is not guaranteed.</p>
-<p>Are there such theorems for graph based functions?</p>
+<p><strong>Question:</strong> Are there such theorems for graph based functions already known?</p>
+<h1 id="combining-functions">Combining functions</h1>
+<p>Let’s stick to these representations of <span class="math inline">\(S_n\)</span> for now. We can denote the representations by noting the <span class="math inline">\(k\)</span> that occur in the expansion. <span class="math inline">\((1)\)</span> would act on a space <span class="math inline">\(\mathbf{X}^n\)</span>, <span class="math inline">\((1,2)\)</span> on <span class="math inline">\(\mathbf{X}_1^n \oplus \mathbf{X}_2^{2n}\)</span> and so on. We can then denote for a function what representation it’s domain and image carry. For example the function that counts the total edge weight <span class="math inline">\(\sum_{i,j} e_{i,j}\)</span> is of the form <span class="math inline">\((2) \rightarrow (0)\)</span>.</p>
+<p>A set based function <span class="math inline">\(f\)</span> is of the form <span class="math inline">\((1) \rightarrow (0)\)</span>. A node wise network measure on a graph in the sense of Complex Networks is <span class="math inline">\((2) \rightarrow (1)\)</span>.</p>
+<p>Functions can be combined in the obvious way, give a network measure <span class="math inline">\(C\)</span> and a set based neural network <span class="math inline">\(\mathcal{NN}\)</span> we can obtain a function on graphs by first applying the network measure and then the neural network.</p>
+<p>More interestingly, we can also use set based functions in the other direction to lift. Given set based functions <span class="math inline">\(f: (1) \rightarrow (0)\)</span> and <span class="math inline">\(g: (1) \rightarrow (0)\)</span> on on <span class="math inline">\(S_{n}\)</span> we can create a set consisting of <span class="math inline">\(g_i = g(\{x_{ij}\}_{j})\)</span> that transforms naturally under <span class="math inline">\(S_n\)</span>. Calling this set <span class="math inline">\(\{g\}\)</span> we can then apply <span class="math inline">\(f\)</span> to it</p>
+<p><span class="math display">\[f(\{g(x_{ij})\}) : (2) \rightarrow (0)\]</span></p>
+<p>As an example, let the edge weights be the adjacency matrix <span class="math inline">\(A_{ij}\)</span>, take <span class="math inline">\(g\)</span> to be the sum function and <span class="math inline">\(f\)</span> the mean, <span class="math display">\[\begin{aligned}
+g(M) &amp;= \sum_{m \in M} m\\
+f(M) &amp;= \frac{\sum_{m \in M} m}{\sum_{m \in M}}\end{aligned}\]</span> then <span class="math display">\[f(\{g(A_{ij})\}) = \frac{\sum_{i, j} A_{ij}}{\sum_{i}}\]</span> is the average degree of the network described by <span class="math inline">\(A\)</span></p>
+<h1 id="the-role-of-dynamics">The role of Dynamics</h1>
+<p>Graphs encode a notion of locality. Functions that act covariantly can very easily be defined through local dynamics.</p>
+<p>Linear dynamics on the graph seem to cover most cases of Graph Neural Networks considered so far.</p>
+<h1 id="lifting-to-probabilities">Lifting to probabilities</h1>
+<p>If we don’t just want to look at functions from graphs to nodes, but also look at functions of probability densities of graphs and nodes, an interesting potential connection to QFT arises. QFT studies linear state spaces on tensor towers like we looked at above and specifically bosonic and fermionic statistics concern the question of how the spaces considered transform under permutation.</p>
+<p>However, this is a different permutation symmetry than we have above. In the space <span class="math inline">\(\mathbf{X}^{kn}\)</span> QFT considers permutations on the <span class="math inline">\(k\)</span> rather than the <span class="math inline">\(n\)</span>. So a direct application of, e.g. Fock spaces is not possible.</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This can be said more abstractly of course but it should be relatively clear I hope<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
 </body>
 </html>

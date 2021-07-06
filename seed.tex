@@ -98,24 +98,16 @@ Generally speaking the domain and image of the function, written as a function o
 %
 %This is the form of the symmetry of a Graph Neural Network. The coefficients $(x_2)_{ij}$ contain the information on the connection from node $i$ to $j$, in the simples case simply whether the nodes are connected or not.
 %
-%\subsection{Tensor towers}
-%
-%More generally we can have an entire tower of tensors, where, at each point in the hierarchy, we take some base space $\X_k$, take $n$ copies of it, and tensor it together $k$ times.
-%\begin{align}
-%\XX = \bigoplus_{k=0}^{\infty} \bigotimes^k \X_k^n
-%\end{align}
-%
-%This also transforms naturally under $S_n$. This space naturally carries data on hypergraphs. Covariant Neural networks on such spaces would appropriately be called Hypergraph Neural Networks.
+\subsection{Tensor towers}
 
-\section{QFT and all that}
+In the above the node features live in $\X^n$ and the edge features in $\X_e^{n \times n} = \X_e^{2n}$. The permutation group $S_n$ acts naturally on these spaces by permuting indices in the tensor copies\footnote{This can be said more abstractly of course but it should be relatively clear I hope}. More generally the permutation group also acts naturally on $\X_k^{kn}$ where $\X_k$ is some fixed base space.
 
-Some vague associations...
+We can take the direct sum of such spaces to obtain an entire tensor tower,
+\begin{align}
+\XX = \bigoplus_{k=0}^{\infty} \X_k^{kn} \;.
+\end{align}
+This space also transforms naturally under $S_n$. It also has an interpretation as being the space that carries data on hypergraphs. Hypergraph Neural Networks have actually already been defined in \cite{feng2019hypergraph}.
 
-Let's consider set based functions first. We want functions to go from some (set of) $X$ to (a set of) $Y$.Let's consider the space of functions on $X$, $\mathbb{R}^X$ (subject to sensible conditions). Then a function $X$ to $Y$ induces a linear function $\mathbb{R}^X$ to $\mathbb{R}^Y$. The cartesian product of spaces $X$ and $Y$ on which the permutation acts directly becomes a linear representation of the permutaton group on the tensor products of $\mathbb{R}^X$ and $\mathbb{R}^Y$ respectively. These spaces contain the probability densities on the direct product space. They might be suitable to Bayesian extensions of learning set or graph based functions.
-
-This latter is pretty much the set up for a bosonic QFT. This suggests that we can adopt the machinery of QFT with creation and annihilation operators, actions and interaction terms, diagrams, etc... to the setting of set based functions. It might be interesting to see if (stochastic) gradient descent can be connected to renormalization.
-
-The big question is what the equivalent of these structures would be if we consider graph based functions.
 
 \section{General structure results for permutation invariant functions}
 
@@ -129,7 +121,52 @@ See theorem ?? \citet{zaheer2017deep}. However this reperesentation might not be
 
 What is remarkable about this is that this representation theorem also allows us to compare functions on sets of different size, though the results of \citet{wagstaff2019limitations} show that generalizations to larger sets is not guaranteed.
 
-Are there such theorems for graph based functions?
+\textbf{Question: } Are there such theorems for graph based functions already known?
+
+\section{Combining functions}
+
+Let's stick to these representations of $S_n$ for now. We can denote the representations by noting the $k$ that occur in the expansion. $(1)$ would act on a space $\X^n$, $(1,2)$ on $\X_1^n \oplus \X_2^{2n}$ and so on. We can then denote for a function what representation it's domain and image carry. For example the function that counts the total edge weight $\sum_{i,j} e_{i,j}$ is of the form $(2) \rightarrow (0)$.
+
+A set based function $f$ is of the form $(1) \rightarrow (0)$. A node wise network measure on a graph in the sense of Complex Networks is $(2) \rightarrow (1)$.
+
+Functions can be combined in the obvious way, give a network measure $C$ and a set based neural network $\NN$ we can obtain a function on graphs by first applying the network measure and then the neural network.
+
+More interestingly, we can also use set based functions in the other direction to lift. Given set based functions $f: (1) \rightarrow (0)$  and $g: (1) \rightarrow (0)$ on  on $S_{n}$ we can create a set consisting of $g_i = g(\{x_{ij}\}_{j})$ that transforms naturally under $S_n$. Calling this set $\{g\}$ we can then apply $f$ to it
+
+\begin{equation*}
+f(\{g(x_{ij})\}) : (2) \rightarrow (0)
+\end{equation*}
+
+As an example, let the edge weights be the adjacency matrix $A_{ij}$, take $g$ to be the sum function and $f$ the mean,
+\begin{align}
+g(M) &= \sum_{m \in M} m\\
+f(M) &= \frac{\sum_{m \in M} m}{\sum_{m \in M}}
+\end{align}
+then 
+\begin{equation}
+f(\{g(A_{ij})\}) = \frac{\sum_{i, j} A_{ij}}{\sum_{i}}
+\end{equation}
+is the average degree of the network described by $A$
+
+\section{The role of Dynamics}
+
+Graphs encode a notion of locality. Functions that act covariantly can very easily be defined through local dynamics.
+
+Linear dynamics on the graph seem to cover most cases of Graph Neural Networks considered so far.
+
+\section{Lifting to probabilities}
+
+If we don't just want to look at functions from graphs to nodes, but also look at functions of probability densities of graphs and nodes, an interesting potential connection to QFT arises. QFT studies linear state spaces on tensor towers like we looked at above and specifically bosonic and fermionic statistics concern the question of how the spaces considered transform under permutation.
+
+However, this is a different permutation symmetry than we have above. In the space $\X^{kn}$ QFT considers permutations on the $k$ rather than the $n$. So a direct application of, e.g. Fock spaces is not possible.
+%
+%However, the interest in QFT is not for an action of $S_n$ on the whole tower 
+%
+%Let's consider set based functions first. We want functions to go from some (set of) $X$ to (a set of) $Y$.Let's consider the space of functions on $X$, $\mathbb{R}^X$ (subject to sensible conditions). Then a function $X$ to $Y$ induces a linear function $\mathbb{R}^X$ to $\mathbb{R}^Y$. The cartesian product of spaces $X$ and $Y$ on which the permutation acts directly becomes a linear representation of the permutaton group on the tensor products of $\mathbb{R}^X$ and $\mathbb{R}^Y$ respectively. These spaces contain the probability densities on the direct product space. They might be suitable to Bayesian extensions of learning set or graph based functions.
+%
+%This latter is pretty much the set up for a bosonic QFT. This suggests that we can adopt the machinery of QFT with creation and annihilation operators, actions and interaction terms, diagrams, etc... to the setting of set based functions. It might be interesting to see if (stochastic) gradient descent can be connected to renormalization.
+%
+%The big question is what the equivalent of these structures would be if we consider graph based functions.
 
 \bibliography{biblio}
 
