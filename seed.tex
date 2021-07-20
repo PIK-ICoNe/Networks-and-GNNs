@@ -113,8 +113,8 @@ This space also transforms naturally under $S_n$. It also has an interpretation 
 
 Theorems exist that guarantee that a permutation invariant function can be written as
 
-\begin{align}
-f(x_1, x_2, \dots) = f^* \left(\sum_i (f^{**}(x_i))\right)
+\begin{align} \label{eq::1 to 0 structure}
+f(x_1, x_2, \dots) = g \left(\sum_i (h(x_i))\right)
 \end{align}
 
 See theorem ?? \citet{zaheer2017deep}. However this reperesentation might not be useful or meaningful, see e.g. the discussion in \citet{wagstaff2019limitations}.
@@ -131,11 +131,13 @@ A set based function $f$ is of the form $(1) \rightarrow (0)$. A node wise netwo
 
 Functions can be combined in the obvious way, give a network measure $C$ and a set based neural network $\NN$ we can obtain a function on graphs by first applying the network measure and then the neural network.
 
-More interestingly, we can also use set based functions in the other direction to lift. Given set based functions $f: (1) \rightarrow (0)$  and $g: (1) \rightarrow (0)$ on  on $S_{n}$ we can create a set consisting of $g_i = g(\{x_{ij}\}_{j})$ that transforms naturally under $S_n$. Calling this set $\{g\}$ we can then apply $f$ to it
+\paragraph*{Notation:} We write a set of elements indexed by $i,j,\dots \in 1 \dots N$ as $\{z_{ijk}\}$ meaning that the set is over all possible indices. If we want to take a set that is only over a part of the indices we write $\{z_{ijk}\}_k$ to denote the set that covers all $k$, and so on. Thus $\{z_{ijk}\} = \{z_{ijk}\}_{ijk}$ \textit{This is not very clean, what we really want to say is $z_{ij}$ up to permutation. This is the same as a set for one index, but not for several indices. Also needs to be tuned to work with covariant functions...}
 
-\begin{equation*}
+More interestingly, we can also use set based functions in the other direction to lift. Given set based functions $f: (1) \rightarrow (0)$  and $g: (1) \rightarrow (0)$ on  on $S_{n}$ we can create a set consisting of $g_i = g(\{x_{ij}\}_{j})$ that transforms naturally under $S_n$. We can then apply $f$ to the set $\{g_i\}$ to obtain a function
+
+\begin{equation} \label{eq::2 to 0 structure}
 f(\{g(x_{ij})\}) : (2) \rightarrow (0)
-\end{equation*}
+\end{equation}
 
 As an example, let the edge weights be the adjacency matrix $A_{ij}$, take $g$ to be the sum function and $f$ the mean,
 \begin{align}
@@ -148,7 +150,85 @@ f(\{g(A_{ij})\}) = \frac{\sum_{i, j} A_{ij}}{\sum_{i}}
 \end{equation}
 is the average degree of the network described by $A$
 
-\section{The role of Dynamics}
+\subsection{A conjecture}
+
+In \eqref{eq::2 to 0 structure}, $f$ and $g$ are set based functions, we know that they can be expressed in the form \eqref{eq::1 to 0 structure}. Conjecture: Every function $(2) \rightarrow (0)$ can be written in the form \eqref{eq::2 to 0 structure}.
+
+Explicitly:
+\begin{equation}
+f(\{e_{ij}\}) = g_2\left(\sum_j h_2 \left(g_1 \left( \sum_i h_1(e_{ij})\right)\right)\right)
+\end{equation}
+
+By defining $h_{21} = g_1 \circ h_2$ this simplifies
+
+\begin{equation} \label{eq::2 to 0 structure conjecture}
+f(\{e_{ij}\}) = g_2\left(\sum_j h_{21} \left( \sum_i h_1(e_{ij})\right)\right)
+\end{equation}
+
+\textbf{What do we know about covariant functions $(1) \rightarrow (1)$?} A form like $y_i = g(x_i, h(\{x_i\}))$ seems natural...
+
+\section{The dynamics on graphs perspective}
+
+\subsection{An initial observation}
+
+Take a discrete time linear diffusive dynamical system on a graph. The equations are given by
+\begin{align}
+x(t + 1) = \left( A \otimes 1 + B \otimes L \right) x
+\end{align}
+
+with $L$ the effective network coupling.
+Writing $x$ in components $x_{ai}$ with $i$ denoting the graph, and $a$ denoting the internal idnices this becomes
+
+\begin{align}
+x_{ai}(t + 1) &= A_{ab} x_{bj} + B_{ab} L_{ij} x_{bj} \\
+x(t+1) &= A \cdot x(t) + B \cdot x(t) \cdot L^T
+\end{align}
+
+Assume for a moment we have no local mixing $A = 0$, then we have
+
+\begin{align}
+x(t+n) &= B^n \cdot x(t) (L^T)^n
+\end{align}
+
+These type of terms are often a central ingredient in graph convolutional networks. With $A \neq 0$ we get something like recurrence.
+
+This raises the possibility that more general dyanmics on graphs could be of interest in the construction of GNNs, including possibly using ODE or stochastic dynamics instead of discrete time maps.
+
+It also raises the question whether there are interesting structure results for functions of type $(1, 2) \rightarrow (1)$, which serve as the righthandside of a graph dynamical system.
+
+One final note, the ARMA Filters for GNNs paper constructs a dynamical system that is supposed to converge to an interesting quantity. This is done by inserting a source in the dynamics above. Generally speaking the idea that by using dynamics we can solve equations could also be readily generalized.
+
+Finally, a different notion of graph dynamics is given by functions $(2) \rightarrow (2)$ that change the graph itself, for example by stochastic rewiring. It would be interesting whether these types of dynamics have any use in the construction of GNNs.
+
+\subsection{Some thoughts on general structure theorems - linear case}
+
+A dynamical system on graphs is specified by a function $(1, 2) \rightarrow (1)$. That is, a covariant function $f_i(\{e_{ij}\}, \{x_i\})$.
+
+The dynamics are then either of
+
+\begin{align}
+\dot x_i(t) &= f_i(\{e_{ij}\}, \{x_i(t)\})\\
+x_i(t + 1) &= f_i(\{e_{ij}\}, \{x_i(t)\})
+\end{align}
+
+The most typical covariant dynamics linear in $e$ and $x$ (separately) is given by
+\begin{align}
+x_i(t + 1) &= A \cdot x_i + \sum_j  B_1 e_{ij} B_2 x_j
+\end{align}
+
+To obtain the gneuinely most general form we would need to allow pure $e_{ij}$ terms and also consider $e_{ji} x_{j}$
+
+Generically this can be rewritten by going to an eigenbasis of $B_1 \tensor B_2^T$. Call the left and right eigenmatrices $B_k$ and $B_k^r$ then we obtain 
+\begin{align}
+x_i(t + 1) &= A \cdot x_i + \sum_k \sum_j   Tr (e_{ij} B_k^r) B_k x_j
+\end{align}
+
+Writing ${L_k}_{ij} = Tr (e_{ij} B_k^r)$ this form becomes a form of multilayer dynamics on effective networks given by the $L_k$.
+
+\begin{align}
+x(t + 1) = \left( A \otimes 1 + \sum_k B_k \otimes L_k \right) x
+\end{align}
+
 
 Graphs encode a notion of locality. Functions that act covariantly can very easily be defined through local dynamics.
 
